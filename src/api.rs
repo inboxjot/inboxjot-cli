@@ -24,6 +24,13 @@ const MAX_RETRIES: u32 = 2;
 const MAX_RETRY_AFTER: Duration = Duration::from_secs(60);
 const MAX_PER_PAGE: usize = 100;
 
+pub fn get_fallback_roots() -> Vec<reqwest::Certificate> {
+  webpki_root_certs::TLS_SERVER_ROOT_CERTS
+    .iter()
+    .filter_map(|cert| reqwest::Certificate::from_der(cert).ok())
+    .collect()
+}
+
 #[derive(Clone, Debug)]
 pub struct Api {
   http: reqwest::Client,
@@ -73,7 +80,10 @@ impl Api {
         format!("The API URL {base_url} is not valid: {error}"),
       )
     })?;
-    let http = reqwest::Client::builder().timeout(TIMEOUT).build()?;
+    let http = reqwest::Client::builder()
+      .timeout(TIMEOUT)
+      .tls_certs_merge(get_fallback_roots())
+      .build()?;
 
     let notify = std::io::stderr().is_terminal();
     Ok(Self {

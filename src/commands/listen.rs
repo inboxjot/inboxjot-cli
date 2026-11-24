@@ -315,6 +315,7 @@ fn build_forward(url: &str, secret: &str) -> Result<Forward> {
   let http = reqwest::Client::builder()
     .timeout(FORWARD_TIMEOUT)
     .user_agent(CLI_USER_AGENT)
+    .tls_certs_merge(crate::api::get_fallback_roots())
     .build()?;
   let key = BASE64.decode(&secret[SECRET_PREFIX.len()..]).map_err(|_| {
     Error::failed("invalid_secret", "The saved signing secret is not valid.")

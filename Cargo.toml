@@ -52,12 +52,13 @@ sha2 = "0.11.1"
 shlex = "2.0.1"
 thiserror = "2.0.21"
 tokio = { version = "1.54.1", features = ["rt-multi-thread", "macros", "time", "fs", "io-std", "io-util", "net", "signal", "sync"] }
-tokio-tungstenite = { version = "0.30.0", default-features = false, features = ["connect", "rustls-tls-native-roots"] }
+tokio-tungstenite = { version = "0.30.0", default-features = false, features = ["connect", "rustls-tls-native-roots", "rustls-tls-webpki-roots"] }
 toml = "1.2.1"
 toml_edit = "0.25.19"
 unicode-width = "0.2.3"
 uuid = { version = "1.29.1", features = ["v4"] }
 webbrowser = "1.2.6"
+webpki-root-certs = "1.0.12"
 which = "8.0.6"
 
 [target.'cfg(not(target_os = "macos"))'.dependencies]

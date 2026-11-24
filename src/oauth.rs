@@ -82,6 +82,7 @@ pub fn build_http() -> Result<reqwest::Client> {
       .user_agent(CLI_USER_AGENT)
       .redirect(reqwest::redirect::Policy::none())
       .timeout(Duration::from_secs(30))
+      .tls_certs_merge(crate::api::get_fallback_roots())
       .build()?,
   )
 }
@@ -377,8 +378,22 @@ fn get_token_error<E: std::error::Error + 'static>(
         description.unwrap_or_else(|| response.error().to_string()),
       )
     }
-    error => Error::failed("oauth_error", format!("The login request failed: {error}")),
+    error => Error::failed(
+      "oauth_error",
+      format!("The login request failed: {}", describe(&error)),
+    ),
   }
+}
+
+fn describe(error: &dyn std::error::Error) -> String {
+  let mut text = error.to_string();
+  let mut source = error.source();
+  while let Some(cause) = source {
+    text.push_str(": ");
+    text.push_str(&cause.to_string());
+    source = cause.source();
+  }
+  text
 }
 
 fn parse_url<T>(url: std::result::Result<T, oauth2::url::ParseError>) -> Result<T> {
