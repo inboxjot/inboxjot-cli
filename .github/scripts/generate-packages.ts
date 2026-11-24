@@ -16,7 +16,7 @@ const tarballs: Record<string, string> = {};
 function pack(dir: string): string {
   const output = execFileSync('npm', ['pack', '--json', '--pack-destination', resolve(outDir)], { cwd: dir });
   const [{ filename }]: { filename: string }[] = JSON.parse(output.toString());
-  return join(outDir, filename);
+  return join(resolve(outDir), filename);
 }
 
 function hash(file: string): string {
