@@ -1,0 +1,29 @@
+{
+  "name": "@inboxjot/cli",
+  "version": "0.0.0",
+  "description": "The Inboxjot command-line interface",
+  "keywords": ["inboxjot", "email", "cli"],
+  "homepage": "https://inboxjot.com/docs/cli",
+  "license": "MIT",
+  "author": "Arik Chakma <arikchangma@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inboxjot/inboxjot-cli.git",
+    "directory": "npm"
+  },
+  "bin": {
+    "inboxjot": "bin/inboxjot.js",
+    "ij": "bin/inboxjot.js"
+  },
+  "files": ["bin"],
+  "engines": {
+    "node": ">=18"
+  },
+  "optionalDependencies": {
+    "@inboxjot/cli-darwin-arm64": "0.0.0",
+    "@inboxjot/cli-darwin-x64": "0.0.0",
+    "@inboxjot/cli-linux-arm64": "0.0.0",
+    "@inboxjot/cli-linux-x64": "0.0.0",
+    "@inboxjot/cli-win32-x64": "0.0.0"
+  }
+}
