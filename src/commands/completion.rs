@@ -1,3 +1,5 @@
+use std::io::Write;
+
 use clap::CommandFactory;
 
 use crate::cli::Cli;
@@ -10,11 +12,10 @@ pub struct CompletionArgs {
 }
 
 pub fn run(args: &CompletionArgs) -> Result<()> {
-  clap_complete::generate(
-    args.shell,
-    &mut Cli::command(),
-    "inboxjot",
-    &mut std::io::stdout(),
-  );
-  Ok(())
+  let mut script = Vec::new();
+  clap_complete::generate(args.shell, &mut Cli::command(), "inboxjot", &mut script);
+  match std::io::stdout().lock().write_all(&script) {
+    Err(error) if error.kind() == std::io::ErrorKind::BrokenPipe => Ok(()),
+    result => Ok(result?),
+  }
 }
