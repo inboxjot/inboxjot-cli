@@ -1,7 +1,7 @@
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { chmodSync, copyFileSync, cpSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 
 const [version, artifactsDir, outDir] = process.argv.slice(2);
 if (!version || !artifactsDir || !outDir) {
@@ -14,7 +14,7 @@ const cli: { optionalDependencies: Record<string, string>; [key: string]: unknow
 const tarballs: Record<string, string> = {};
 
 function pack(dir: string): string {
-  const output = execFileSync('npm', ['pack', '--json', '--pack-destination', outDir], { cwd: dir });
+  const output = execFileSync('npm', ['pack', '--json', '--pack-destination', resolve(outDir)], { cwd: dir });
   const [{ filename }]: { filename: string }[] = JSON.parse(output.toString());
   return join(outDir, filename);
 }
